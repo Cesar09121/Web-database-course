@@ -4,11 +4,7 @@ function fadeOutAndNavigate(page) {
         window.location.href = page; 
     }, 500);
 }
-// services dropdown
-function toggleDropdown(dropdownId) {
-    const dropdown = document.getElementById(dropdownId);
-    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-}
+
 
 // selected services function
 function selectServiceList() {
@@ -19,7 +15,7 @@ function selectServiceList() {
 
     selectedServices.forEach(service => {
         let listItem = document.createElement("li");
-        listItem.textContent = service.value;
+        listItem.textContent = service.value.replace("-", " "); 
         serviceList.appendChild(listItem);
 });
 }
