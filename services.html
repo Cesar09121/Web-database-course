@@ -32,31 +32,39 @@
             <h1>Select Your Services</h1>
             
             <div class="service-categories">
-                <div class="category" id="manicureServices">
-                    <h2>Manicure Services</h2>
-                    <div class="service-list" data-category="manicure"> 
-                    </div>
+                <div class="main-service" onclick ="toggleDropdown('manicure-option')">Manicure</div>
+                <div class = "dropdown" id="manicure-option">
+                    <label><input type="checkbox" name="service" value="manicure"> Basic Manicure</label>
+                    <label><input type="checkbox" name="service" value="manicure"> Gel Manicure</label>
+                    <label><input type="checkbox" name="service" value="manicure"> Plain Manicure</label>
                 </div>
-
-                <div class="category" id="pedicureServices">
-                    <h2>Pedicure Services</h2>
-                    <div class="service-list" data-category="pedicure">
-                    </div>
+                <div class="main-service" onclick ="toggleDropdown('pedicure-option')">Pedicure</div>
+                <div class = "dropdown" id="pedicure-option">
+                    <label><input type="checkbox" name="service" value="pedicure"> Basic Pedicure</label>
+                    <label><input type="checkbox" name="service" value="pedicure"> Gel Pedicure</label>
+                    <label><input type="checkbox" name="service" value="pedicure"> Special Pedicure</label>
                 </div>
+                <div class="main-service" onclick ="toggleDropdown('waxing-option')">Waxing</div>
+                <div class = "dropdown" id="waxing-option">
+                    <label><input type="checkbox" name="service" value="waxing"> Full Body </label>
+                    <label><input type="checkbox" name="service" value="waxing"> Half Body </label>
+                    <label><input type="checkbox" name="service" value="waxing"> Leg </label>
+                    <label><input type="checkbox" name="service" value="waxing"> Eye-Brow</label>
+                    <label><input type="checkbox" name="service" value="waxing"> Lip </label>
+                    <label><input type="checkbox" name="service" value="waxing"> Chin </label>
+                    <label><input type="checkbox" name="service" value="waxing"> Underarm </label>
+                    <label><input type="checkbox" name="service" value="waxing"> Full Face </label>
+                </div>
+               
+                <h3>Selected services:</h3>
+                <ul id="selected-services"></ul>
             </div>
-
-            <div class="booking-summary">
-                <h2>Your Booking</h2>
-                <div id="selectedServices">
-                    <p>No services selected</p>
-                </div>
-                <div class="summary-details">
-                    <p>Total Duration: <span id="totalDuration">0 minutes</span></p>
-                    <p>Total Price: <span id="totalPrice">$0</span></p>
-                </div>
-                <a href="booking.html" class="btn btn-next">Proceed to Booking</a>
-            </div>
+            
+            
+            
+            <button onclick="fadeOutAndNavigate('booking.html')">Proceed to Booking</button>
         </section>
     </main>
+    <script src="script.js" defer></script>
 </body>
 </html>
