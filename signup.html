@@ -29,21 +29,23 @@
     </header> 
     <div class="signup-form">
         <h2>Sign up</h2>
-        <input type="text" id="firstName" placeholder="First Name" required>
-        <input type="text" id="lastName" placeholder="Last Name"  required>
-        <input type="email" id="signupEmail" placeholder="Email" required>
-        <input type="password" id="signupPassword" placeholder="Password" required>
-        
-        <select id="userRole" onchange="toggleKeyField()">
-            <option value="1">Customer</option>
-            <option value="2">Owner</option>
-            <option value="3">Technician</option>
-        </select>
-        <div id="keyField" style="display: none;">
-            <input type="password" id="accessKey" placeholder="Access Key (Required for Owner/Technician)" required>
-            <p class="key-info">Only authorized personnel can register as Owners or Technicians</p>
-        </div>
-        <button id="submit" onclick="fadeOutAndNavigate('index.html')">Create Account</a></button>
+        <form id="signupForm">
+            <input type="text" id="firstName" placeholder="First Name" required>
+            <input type="text" id="lastName" placeholder="Last Name" required>
+            <input type="email" id="signupEmail" placeholder="Email" required>
+            <input type="password" id="signupPassword" placeholder="Password" required>
+            
+            <select id="userRole" onchange="toggleKeyField()">
+                <option value="1">Customer</option>
+                <option value="2">Owner</option>
+                <option value="3">Technician</option>
+            </select>
+            <div id="keyField" style="display: none;">
+                <input type="password" id="accessKey" placeholder="Access Key (Required for Owner/Technician)">
+                <p class="key-info">Only authorized personnel can register as Owners or Technicians</p>
+            </div>
+            <button type="submit" id="submit">Create Account</button>
+        </form>
     </div>
            
         <script src="script.js" defer></script>
