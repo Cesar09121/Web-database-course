@@ -73,12 +73,6 @@ function selectServiceList() {
 }
 
 
-
-
-
-
-
-
 function login(e){
     const user ={
 

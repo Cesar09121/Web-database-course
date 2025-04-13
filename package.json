@@ -5,11 +5,11 @@
         "express": "^5.1.0",
         "mysql": "^2.18.1"
     },
-    "scripts": {
-        "dev": "node server.js",
-        "start": "node server.js"
-    },
     "devDependencies": {
         "nodemon": "^3.1.9"
+    },
+    "scripts": {
+        "dev": "nodemon index.js",
+        "start": "node index.js"
     }
 }

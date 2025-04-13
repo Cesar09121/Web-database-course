@@ -1,24 +1,16 @@
-const users = [{
-    userId: 1,
-    username: 'user1',
-    password: 'password1'
-}
-]
+const express = require('express');
+const User = require('../models/user');
+const router = express.Router();
 
-
-function getAllUsers() {
-    return users;
-}
-
-function login(username, password) {
-    const user = users.find(user => user.username === username && user.password === password);
-    if (user) {
-        return { success: true, message: 'Login successful' };
-    } else {
-        return { success: false, message: 'Invalid username or password' };
+router.get('/getAllUsers', (req, res) => {
+    try{
+        const users = User.getAllUsers();
+        res.send(users);
     }
-}
-module.exports = {
-    getAllUsers,
-    login
-};
+    catch(err){
+        console.error(err);
+        res.status(401).send({message: err.message});
+    }
+    
+});
+module.exports = router;
