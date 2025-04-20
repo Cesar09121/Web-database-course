@@ -1,78 +1,119 @@
+// Email validation helper
 function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
 }
 
-// this class is used to create user objects
+// String validation helper
+function validString(word) {
+    return word.trim() !== "";
+}
+
+// User class
 class User {
-    constructor(username, password) {
-        this.username = username;
+    constructor(firstName, lastName, email, password, role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
         this.password = password;
+        this.role = role;
         this.createdAt = new Date();
     }
 }
 
-//signup form validation
+// Form validation
 function validateSignupForm() {
     const email = document.getElementById('signupEmail').value.trim();
     const password = document.getElementById('signupPassword').value.trim();
     const confirmPassword = document.getElementById('confirmPassword').value.trim();
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
     
-    if (!email || !password || !confirmPassword) {
+    if (!email || !password || !confirmPassword || !firstName || !lastName) {
         alert('Please fill in all fields.');
-        return false; 
+        return false;
     }
     
     if (!validateEmail(email)) {
         alert('Please enter a valid email address.');
-        return false; 
+        return false;
     }
     
     if (password !== confirmPassword) {
         alert('Passwords do not match.');
-        return false; 
+        return false;
     }
     
-    return true; 
+    return true;
 }
 
-// user have to fill the form before submitting
-document.getElementById('loginForm').addEventListener('submit', function (event) {
-    const email = document.getElementById('loginEmail').value.trim();
-    const password = document.getElementById('loginPassword').value.trim();
+// Event Listeners
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded');
     
-    if (!email || !password) {
-        alert('Please fill in both email and password fields.');
-        event.preventDefault(); // prevent user from submitting the form without filling the fields
-    } else {
-        event.preventDefault(); // prevent form submission to stay on page
-        
-        const loginUser = new User(email, password);
-
-        console.log('Login User:');
-        console.log(loginUser);
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', login);
+        console.log('Login form listener added');
+    }
+    
+    const signupForm = document.getElementById('signupForm');
+    if (signupForm) {
+        signupForm.addEventListener('submit', register);
+        console.log('Signup form listener added'); 
     }
 });
 
-document.getElementById('registrationForm').addEventListener('submit', function (event) {
-    event.preventDefault();
+// Login function
+function login(e) {
+    e.preventDefault();
+    console.log('Login function called');
+    
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    if (!validString(email) || !validString(password)) {
+        alert('Email and password cannot be blank!');
+        return;
+    }
+    
+    const loginUser = new User(null, null, email, password, null);
+    console.log('Login attempt:', loginUser);
+}
+
+// Registration function
+function register(e) {
+    e.preventDefault();
+    console.log('Register function called'); 
     
     if (validateSignupForm()) {
-        const email = document.getElementById('signupEmail').value.trim();
-        const password = document.getElementById('signupPassword').value.trim();
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
+        const role = document.getElementById('userRole').value;
         
-        const newUser = new User(email, password);
+        const newUser = new User(firstName, lastName, email, password, role);
+        console.log('New User Registration:', newUser);
         
-        console.log('New User:');
-        console.log(newUser);
+        alert('Account created successfully!');
     }
-});
+}
 
-if (typeof window.fadeOutAndNavigate !== 'function') {
-    window.fadeOutAndNavigate = function(page) {
-        document.body.style.opacity = 0; 
-        setTimeout(() => {
-            window.location.href = page; 
-        }, 500);
+function fadeOutAndNavigate(page) {
+    console.log('Navigating to:', page);
+    document.body.style.transition = 'opacity 0.5s ease';
+    document.body.style.opacity = '0';
+    setTimeout(() => {
+        window.location.href = page;
+    }, 500);
+}
+
+function toggleKeyField() {
+    const userRole = document.getElementById('userRole');
+    const keyField = document.getElementById('keyField');
+    
+    if (userRole && keyField) {
+        keyField.style.display = (userRole.value === '2' || userRole.value === '3') ? 'block' : 'none';
     }
 }

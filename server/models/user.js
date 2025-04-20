@@ -58,12 +58,53 @@ async function register(user){
         return await login(user)  
     
 }
+async function validateUserRole(userId, roleId) {
+    const sql = `SELECT r.name as role 
+    FROM user u 
+    JOIN role r ON u.role_id = r.id 
+    WHERE u.user_id = ?`;
+const [user] = await con.query(sql, [userId]);
+
+if (!user) throw new Error('User not found');
+if (user.role !== expectedRole) {
+throw new Error(`Unauthorized: User must be a ${expectedRole}`);
+}
+return true;
+}
+async function deleteUser(userId) {
+    const sql = `DELETE FROM user WHERE user_id = ?`;
+    await con.query(sql, [userId]);
+}
+async function updateUser(userId, updates, currentUserId) {
+    if (userId !== currentUserId) {
+        throw new Error('Unauthorized: Users can only update their own information');
+    }
+
+    const sql = `UPDATE user 
+                 SET username = ?,
+                     fullname = ?,
+                     password = ?
+                 WHERE user_id = ?`;
+    
+    const params = [
+        updates.username,
+        updates.fullname,
+        updates.password,
+        userId
+    ];
+
+    await con.query(sql, params);
+}
   
   module.exports = { 
-    getUsers,
     createTable,
     createUserTable,
-    login,register
+    getUsers,
+    login,
+    register,
+    validateUserRole,
+    deleteUser,
+    updateUser
   };
 
 
