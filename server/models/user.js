@@ -4,7 +4,9 @@ const con = require('./db_connect.js');
 async function createRoleTable() {
     let sql = `CREATE TABLE IF NOT EXISTS role (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(50) NOT NULL UNIQUE
+        name VARCHAR(50) NOT NULL UNIQUE,
+        user_id INT NOT NULL,
+        FOREiGN KEY (user_id) REFERENCES user(user_id) ON DELETE RESTRICT
     );`
     await con.query(sql);
 }
