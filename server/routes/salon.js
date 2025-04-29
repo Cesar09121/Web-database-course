@@ -34,7 +34,17 @@ router
         } catch (err) {
             res.status(401).send({ message: err.message });
         }
-    });
+    })
+    .put('/updateSalon/:salon_id', async (req, res) => {
+        try {
+            const salonId = req.params.salon_id;
+            const updates = req.body;
+            await Booking.updateSalon(salonId, updates);
+            res.send("Salon Updated");
+        } catch (err) {
+            res.status(401).send({ message: err.message });
+        }
+    })
 
     
 module.exports = router;

@@ -2,9 +2,19 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
+
+app.use((err, req, res, next) => {
+    console.error(err.stack)
+    res.status(500).json({ message: 'Something broke!' })
+})
+
+
 // Middleware
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "/public")));
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "/public/index.html"));
+});
 
 // CORS middleware
 app.use(function(req, res, next) {
@@ -17,10 +27,14 @@ app.use(function(req, res, next) {
 // Routes - using forward slashes instead of backslashes
 const userRoutes = require("./server/routes/user");
 const serviceRoutes = require("./server/routes/services");
+const bookingRoutes = require("./server/routes/booking");
 
 // Make sure these are mounted properly
-app.use("/users", userRoutes);
+
+app.use("/user", userRoutes);
 app.use("/services", serviceRoutes);
+app.use("/booking", bookingRoutes);
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}!!`));

@@ -60,6 +60,16 @@ router
         } catch (err) {
             res.status(401).send({ message: err.message });
         }
+    })
+    .put('/updateService/:service_id', async (req, res) => {
+        try {
+            const serviceId = req.params.service_id;
+            const updates = req.body;
+            await Service.updateService(serviceId, updates);
+            res.send("Service Updated");
+        } catch (err) {
+            res.status(401).send({ message: err.message });
+        }
     });
 
 module.exports = router;

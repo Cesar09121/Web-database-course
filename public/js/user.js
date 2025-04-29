@@ -1,3 +1,6 @@
+import {fetchData} from  "./main";
+
+
 // Email validation helper
 function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
