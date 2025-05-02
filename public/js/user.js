@@ -1,122 +1,86 @@
-import {fetchData} from  "./main";
+import { fetchData } from "./main.js"
+let loginForm = document.getElementById('loginForm')
+if(loginForm) loginForm.addEventListener('submit', login)
 
-
-// Email validation helper
-function validateEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(String(email).toLowerCase());
-}
-
-// String validation helper
-function validString(word) {
-    return word.trim() !== "";
-}
-
-// User class
-class User {
-    constructor(firstName, lastName, email, password, role) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.createdAt = new Date();
-    }
-}
-
-// Form validation
-function validateSignupForm() {
-    const email = document.getElementById('signupEmail').value.trim();
-    const password = document.getElementById('signupPassword').value.trim();
-    const confirmPassword = document.getElementById('confirmPassword').value.trim();
-    const firstName = document.getElementById('firstName').value.trim();
-    const lastName = document.getElementById('lastName').value.trim();
-    
-    if (!email || !password || !confirmPassword || !firstName || !lastName) {
-        alert('Please fill in all fields.');
-        return false;
-    }
-    
-    if (!validateEmail(email)) {
-        alert('Please enter a valid email address.');
-        return false;
-    }
-    
-    if (password !== confirmPassword) {
-        alert('Passwords do not match.');
-        return false;
-    }
-    
-    return true;
-}
-
-// Event Listeners
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM Content Loaded');
-    
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', login);
-        console.log('Login form listener added');
-    }
-    
-    const signupForm = document.getElementById('signupForm');
-    if (signupForm) {
-        signupForm.addEventListener('submit', register);
-        console.log('Signup form listener added'); 
-    }
-});
-
-// Login function
 function login(e) {
-    e.preventDefault();
-    console.log('Login function called');
-    
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-    
-    if (!validString(email) || !validString(password)) {
-        alert('Email and password cannot be blank!');
-        return;
+  e.preventDefault()
+  let errorSection = document.getElementById("error")
+
+  let username = document.getElementById('username').value
+  let password = document.getElementById('password').value
+
+  if(validString(username)) {
+    errorSection.innerText = `Username cannot be blank!!!`
+  } else {
+    errorSection.innerText = ""  
+
+    const user = {
+      Username: username,
+      Password: password
     }
-    
-    const loginUser = new User(null, null, email, password, null);
-    console.log('Login attempt:', loginUser);
+
+    fetchData('/user/login', user, "POST")
+    .then(data => {
+      if(!data.message) {
+        setCurrentUser(data)
+        window.location.href = "index.html"
+      }
+    })
+    .catch(err => {
+      errorSection.innerText = `${err.message}`
+    })
+  
+    let section = document.getElementById("welcome")
+    section.innerHTML = `Welcome, ${username}!`
+  
+    console.log(user)
+  }
+  document.getElementById('username').value = ""
+  document.getElementById('password').value = ""
+
 }
 
-// Registration function
+function validString(word) {
+  return word == ""
+}
+
+let registerForm = document.getElementById("registerForm")
+if(registerForm) registerForm.addEventListener('submit', register)
+
 function register(e) {
-    e.preventDefault();
-    console.log('Register function called'); 
-    
-    if (validateSignupForm()) {
-        const firstName = document.getElementById('firstName').value;
-        const lastName = document.getElementById('lastName').value;
-        const email = document.getElementById('signupEmail').value;
-        const password = document.getElementById('signupPassword').value;
-        const role = document.getElementById('userRole').value;
-        
-        const newUser = new User(firstName, lastName, email, password, role);
-        console.log('New User Registration:', newUser);
-        
-        alert('Account created successfully!');
+  e.preventDefault() 
+
+  let errorSection = document.getElementById("error")
+
+  const user = {
+    Username: document.getElementById("username").value,
+    Password: document.getElementById("password").value,
+    FirstName: document.getElementById("firstName").value,
+    LastName: document.getElementById("lastName").value,
+    Email: document.getElementById("email").value
+  }
+
+  fetchData("/user/register", user, "POST")
+  .then(data => {
+    if(!data.message) {
+      setCurrentUser(data)
+      window.location.href = "index.html"
     }
+  })
+  .catch(err => {
+    errorSection.innerText = `${err.message}`
+  })
+}  
+
+export function setCurrentUser(user) {
+  localStorage.setItem('user', JSON.stringify(user))
 }
 
-function fadeOutAndNavigate(page) {
-    console.log('Navigating to:', page);
-    document.body.style.transition = 'opacity 0.5s ease';
-    document.body.style.opacity = '0';
-    setTimeout(() => {
-        window.location.href = page;
-    }, 500);
+export function getCurrentUser() {
+  return JSON.parse(localStorage.getItem('user'))
 }
 
-function toggleKeyField() {
-    const userRole = document.getElementById('userRole');
-    const keyField = document.getElementById('keyField');
-    
-    if (userRole && keyField) {
-        keyField.style.display = (userRole.value === '2' || userRole.value === '3') ? 'block' : 'none';
-    }
+export function removeCurrentUser() {
+  localStorage.removeItem('user')
+  window.location.href = "index.html"
 }

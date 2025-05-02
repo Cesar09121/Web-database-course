@@ -1,0 +1,47 @@
+[
+    {
+      "user_id": 1,
+      "username": "cesar_le",
+      "password": "cesar09",
+      "fullname": "Cesar Le",
+      "email_address": "le@gmail.com",
+      "created_date": "2025-05-02T10:00:00",
+      "role_id": 1
+    },
+    {
+      "user_id": 2,
+      "username": "tomoe_vu",
+      "password": "stock",
+      "fullname": "Tomoe Chan",
+      "email_address": "linh@gmail.com",
+      "created_date": "2025-05-02T10:30:00",
+      "role_id": 1
+    },
+    {
+      "user_id": 3,
+      "username": "tuong_le",
+      "password": "leit",
+      "fullname": "Tuong Le",
+      "email_address": "tuong@gmail.com",
+      "created_date": "2025-05-02T11:00:00",
+      "role_id": 2
+    },
+    {
+      "user_id": 4,
+      "username": "jolie_nguyen",
+      "password": "capuchino",
+      "fullname": "Thu Nguyen",
+      "email_address": "thu@gmail.com",
+      "created_date": "2025-05-02T11:30:00",
+      "role_id": 2
+    },
+    {
+      "user_id": 5,
+      "username": "swilk",
+      "password": "seanwilk",
+      "fullname": "Sean Wilk",
+      "email_address": "sean@gmail.com",
+      "created_date": "2025-05-02T12:00:00",
+      "role_id": 3
+    }
+  ]

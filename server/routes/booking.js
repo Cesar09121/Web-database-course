@@ -3,15 +3,6 @@ const router = express.Router();
 const Booking = require('../models/booking');
 
 router
-    .get('/createBookingTable', async (req, res) => {
-        try {
-           const booking = await Booking.createTable();
-            res.send("Booking Table Created")
-        } catch (err) {
-            console.error(err);
-            res.status(401).send({ message: err.message });
-        }
-    })
     .post('/createBooking', async (req, res) => {
         try {
             await Booking.createBooking(req.body);
@@ -28,7 +19,7 @@ router
             res.status(401).send({ message: err.message });
         }
     })
-    .delete('/deleteBooking/:booking_id', async (req, res) => {
+    .delete('/deleteBooking', async (req, res) => {
         try {
             await Booking.deleteBooking(req.params.booking_id);
             res.send("Booking Deleted");
@@ -36,7 +27,7 @@ router
             res.status(401).send({ message: err.message });
         }
     })
-    .get('/getBooking/:booking_id', async (req, res) => {
+    .get('/getAllBooking', async (req, res) => {
         try {
             const booking = await Booking.getBookingById(req.params.booking_id);
             res.send(booking);
@@ -44,7 +35,7 @@ router
             res.status(401).send({ message: err.message });
         }
     })
-    .put('/updateBooking/:booking_id', async (req, res) => {
+    .put('/updateBooking', async (req, res) => {
         try {
             const bookingId = req.params.booking_id;
             const updates = req.body;
@@ -54,7 +45,7 @@ router
             res.status(401).send({ message: err.message });
         }
     })
-    .get('/bookingTimes/:booking_id', async (req, res) => {
+    .get('/bookingTimes', async (req, res) => {
         try {
             const booking = await Booking.bookingTimes(req.params.booking_id);
             res.send(booking);

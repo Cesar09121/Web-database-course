@@ -19,7 +19,7 @@ router
             res.status(401).send({ message: err.message });
         }
     })
-    .get('/getSalons', async (req, res) => {
+    .get('/getAllSalons', async (req, res) => {
         try {
             const salons = await Booking.getSalons();
             res.send(salons);
@@ -27,7 +27,7 @@ router
             res.status(401).send({ message: err.message });
         }
     })
-    .delete('/deleteSalon/:salon_id', async (req, res) => {
+    .delete('/deleteSalon', async (req, res) => {
         try {
             await Booking.deleteSalon(req.params.salon_id);
             res.send("Salon Deleted");
@@ -35,7 +35,7 @@ router
             res.status(401).send({ message: err.message });
         }
     })
-    .put('/updateSalon/:salon_id', async (req, res) => {
+    .put('/updateSalon', async (req, res) => {
         try {
             const salonId = req.params.salon_id;
             const updates = req.body;

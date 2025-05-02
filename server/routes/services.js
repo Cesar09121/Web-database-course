@@ -6,7 +6,7 @@ router
     .get('/createServiceTable', async (req, res) => {
         try {
             await Service.createTable();
-            res.send("Service Table Created")
+            res.send("Service Table Created");
         } catch (err) {
             res.status(401).send({ message: err.message });
         }
@@ -14,14 +14,14 @@ router
     .post('/createService', async (req, res) => {
         try {
             await Service.createService(req.body);
-            res.send("Service Created")
+            res.send("Service Created");
         } catch (err) {
             res.status(401).send({ message: err.message });
         }
     })
-    .get('/getServices', async (req, res) => {
+    .get('/getAllServices', async (req, res) => {
         try {
-            const services = await Service.getServices();
+            const services = await Service.getAllServices();
             res.send(services);
         } catch (err) {
             res.status(401).send({ message: err.message });
@@ -55,18 +55,8 @@ router
     })
     .get('/serviceExists/:service_name', async (req, res) => {
         try {
-            const service = await Service.serviceExists(req.params.service_name);
-            res.send(service);
-        } catch (err) {
-            res.status(401).send({ message: err.message });
-        }
-    })
-    .put('/updateService/:service_id', async (req, res) => {
-        try {
-            const serviceId = req.params.service_id;
-            const updates = req.body;
-            await Service.updateService(serviceId, updates);
-            res.send("Service Updated");
+            const exists = await Service.serviceExists(req.params.service_name);
+            res.send({ exists });
         } catch (err) {
             res.status(401).send({ message: err.message });
         }

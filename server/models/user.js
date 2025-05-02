@@ -32,28 +32,11 @@ async function createUserTable() {
     await createTable();
 }
 
-async function userExists(user) {
-    const sql = `SELECT * FROM user WHERE username = ? OR email_address = ?`;
-    return await con.query(sql, [user.Username, user.Email]);
-}
 
-async function getUsers() {
-    const sql = `SELECT u.*, r.role_name as role 
-                FROM user u 
-                JOIN role r ON u.role_id = r.id`;
-    return await con.query(sql);
-}
-
-async function getUserById(userId) {
-    const sql = `SELECT u.*, r.role_name as role 
-                FROM user u 
-                JOIN role r ON u.role_id = r.id 
-                WHERE u.user_id = ?`;
-    const [user] = await con.query(sql, [userId]);
-    if (!user) throw Error("User not found");
-    delete user.password;
-    return user;
-}
+async function getAllUsers() {
+    let sql = `SELECT * FROM User`
+    return await con.query(sql)
+  }
 
 async function register(user) {
  
@@ -158,20 +141,19 @@ async function updateUser(userId, updates, currentUserId) {
     return await getUserById(userId);
 }
 
-
-async function deleteUser(userId) {
-    const sql = `DELETE FROM user WHERE user_id = ?`;
-    await con.query(sql, [userId]);
-    return { success: true, message: 'User deleted successfully' };
-}
+async function deleteUser(user) {
+    let sql = `
+      DELETE FROM user
+      WHERE userId = ${user.userId}
+    `
+    await con.query(sql)
+  }
 
 module.exports = {
     createRoleTable,
     createTable,
     createUserTable,
-    userExists,
-    getUsers,
-    getUserById,
+    getAllUsers,
     register,
     login,
     validateUserRole,

@@ -1,124 +1,127 @@
-class Service {
-  constructor(name, price, duration) {
-    this.name = name;
-    this.price = price;
-    this.duration = duration;
-    this.serviceId = 'serv_' + Math.random().toString(36).substr(2, 9);
-    this.createdAt = new Date();
-  }
+const API_URL = 'http://localhost:3000';
+
+document.addEventListener('DOMContentLoaded', function() {
+
+  fetch(`${API_URL}/services/getAllServices`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(services => {
+      displayServices(services);
+    })
+    .catch(error => {
+      console.error("Error loading services:", error);
+      document.querySelector('.service-categories').innerHTML = 
+        '<p class="error">Sorry, we couldn\'t load our services. Please try again later.</p>';
+    });
+});
+function displayServices(services) {
+
+  const servicesByCategory = {
+    "Manicure": services.filter(s => s.service_name.includes("Manicure")),
+    "Pedicure": services.filter(s => s.service_name.includes("Pedicure")),
+    "Other Services": services.filter(s => !s.service_name.includes("Manicure") && !s.service_name.includes("Pedicure"))
+  };
   
-  getServiceName() {
-    return this.name;
-  }
+  const categoriesContainer = document.querySelector('.service-categories');
+  categoriesContainer.innerHTML = '';
   
-  getServicePrice() {
-    return this.price;
+  for (const [category, categoryServices] of Object.entries(servicesByCategory)) {
+    if (categoryServices.length === 0) continue;
+    
+    const categoryHeader = document.createElement('h2');
+    categoryHeader.textContent = category;
+    categoriesContainer.appendChild(categoryHeader);
+    
+    categoryServices.forEach(service => {
+      const label = document.createElement('label');
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.name = 'service';
+      checkbox.value = service.service_id;
+      checkbox.dataset.name = service.service_name;
+      checkbox.dataset.price = service.price;
+      checkbox.dataset.duration = service.duration;
+      checkbox.setAttribute('onchange', 'selectServiceList()');
+      
+      label.appendChild(checkbox);
+      label.appendChild(document.createTextNode(` ${service.service_name} - $${service.price} (${service.duration} min)`));
+      
+      categoriesContainer.appendChild(label);
+    });
   }
+  const selectedServicesHeader = document.createElement('h3');
+  selectedServicesHeader.textContent = 'Selected Services:';
   
-  setServicePrice(price) {
-    this.price = price;
-  }
+  const selectedServicesList = document.createElement('ul');
+  selectedServicesList.id = 'selected-services';
+  
+  const serviceSummary = document.createElement('div');
+  serviceSummary.id = 'service-summary';
+  serviceSummary.innerHTML = `
+    <p>Total Price: $<span id="total-price">0.00</span></p>
+    <p>Estimated Duration: <span id="total-duration">0</span> minutes</p>
+  `;
+  
+  categoriesContainer.appendChild(selectedServicesHeader);
+  categoriesContainer.appendChild(selectedServicesList);
+  categoriesContainer.appendChild(serviceSummary);
 }
-function fadeOutAndNavigate(page) {
+
+function selectServiceList() {
+  const selectedCheckboxes = document.querySelectorAll('input[name="service"]:checked');
+  const selectedServicesList = document.getElementById('selected-services');
+  const totalPriceElement = document.getElementById('total-price');
+  const totalDurationElement = document.getElementById('total-duration');
+  
+  selectedServicesList.innerHTML = '';
+  
+  let totalPrice = 0;
+  let totalDuration = 0;
+  
+  selectedCheckboxes.forEach(checkbox => {
+    const serviceName = checkbox.dataset.name;
+    const servicePrice = parseFloat(checkbox.dataset.price);
+    const serviceDuration = parseInt(checkbox.dataset.duration);
+    
+    const listItem = document.createElement('li');
+    listItem.textContent = `${serviceName} - $${servicePrice.toFixed(2)} (${serviceDuration} min)`;
+    selectedServicesList.appendChild(listItem);
+    
+    totalPrice += servicePrice;
+    totalDuration += serviceDuration;
+  });
+  
+  totalPriceElement.textContent = totalPrice.toFixed(2);
+  totalDurationElement.textContent = totalDuration;
+  
+  const selectedServices = Array.from(selectedCheckboxes).map(checkbox => ({
+    id: checkbox.value,
+    name: checkbox.dataset.name,
+    price: parseFloat(checkbox.dataset.price),
+    duration: parseInt(checkbox.dataset.duration)
+  }));
+  
+  localStorage.setItem('selectedServices', JSON.stringify(selectedServices));
+}
+
+window.selectServiceList = selectServiceList;
+
+function fadeOutAndNavigate(url) {
+  const selectedServices = JSON.parse(localStorage.getItem('selectedServices') || '[]');
+  
+  if (selectedServices.length === 0) {
+    alert('Please select at least one service before proceeding.');
+    return;
+  }
+  
   document.body.style.opacity = 0;
   setTimeout(() => {
-    window.location.href = page;
+    window.location.href = url;
   }, 500);
 }
-let isProcessingChange = false;
-document.addEventListener('DOMContentLoaded', function() {
-  const serviceCheckboxes = document.querySelectorAll("input[name='service']");
-  if (serviceCheckboxes.length > 0) {
-    serviceCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener('change', function() {
-        if (!isProcessingChange) {
-          isProcessingChange = true;
-          selectServiceList();
-          setTimeout(() => {
-            isProcessingChange = false;
-          }, 100);
-        }
-      });
-    });
-  }
-});
 
-// selected services
-function selectServiceList() {
-  console.clear();
-  
-  const selectedServices = document.querySelectorAll("input[name='service']:checked");
-  const serviceList = document.getElementById("selected-services");
-  
-  if (serviceList) {
-    serviceList.innerHTML = ""; 
-    
-    selectedServices.forEach(service => {
-      let listItem = document.createElement("li");
-      listItem.textContent = service.value.replace(/-/g, " ");
-      serviceList.appendChild(listItem);
-    });
-    updatePriceAndTime();
-    createServiceObjects();
-  }
-}
-
-function updatePriceAndTime() {
-  const selectedServices = document.querySelectorAll("input[name='service']:checked");
-  let totalPrice = 0;
-  let totalTime = 0;
-
-  selectedServices.forEach(service => {
-    if (service.value.includes("manicure")) {
-      totalPrice += 25;
-      totalTime += 30;
-    } else if (service.value.includes("pedicure")) {
-      totalPrice += 35;
-      totalTime += 45;
-    } else if (service.value.includes("waxing")) {
-      totalPrice += 20;
-      totalTime += 15;
-    }
-  });
-  
-  const priceElement = document.getElementById("total-price");
-  const durationElement = document.getElementById("total-duration");
-  
-  if (priceElement) priceElement.textContent = totalPrice.toFixed(2);
-  if (durationElement) durationElement.textContent = totalTime;
-  
-  localStorage.setItem("totalPrice", totalPrice);
-  localStorage.setItem("totalDuration", totalTime);
-}
-function createServiceObjects() {
-  const selectedServices = document.querySelectorAll("input[name='service']:checked");
-  const services = [];
-  
-  selectedServices.forEach(service => {
-    let price = 0;
-    let duration = 0;
-    
-    if (service.value.includes("manicure")) {
-      price = 25;
-      duration = 30;
-    } else if (service.value.includes("pedicure")) {
-      price = 35;
-      duration = 45;
-    } else if (service.value.includes("waxing")) {
-      price = 20;
-      duration = 20;
-    }
-    
-    // Service object
-    const serviceObj = new Service(service.value, price, duration);
-    services.push(serviceObj);
-  });
-  
-
-  console.log("Selected Services:", services.map(s => s.name).join(", "));
-  services.forEach((service, index) => {
-    console.log(`Service ${index + 1}: ${service.name}, Price: $${service.price}, Duration: ${service.duration} min`);
-  });
-
-  localStorage.setItem("selectedServices", JSON.stringify(services.map(s => s.name)));
-}
+window.fadeOutAndNavigate = fadeOutAndNavigate;

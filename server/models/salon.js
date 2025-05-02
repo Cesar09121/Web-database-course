@@ -20,7 +20,7 @@ async function findSalon(salon_id) {
    let sql = `SELECT * FROM salon WHERE salon_id = ${salon_id}`;
     return await con.query(sql);
 }
-async function getSalons() {
+async function getAllSalons() {
    let sql = `SELECT * FROM salon`;
    return await con.query(sql);
 }
@@ -65,6 +65,6 @@ module.exports = {
     createTable,
     createSalon,
     findSalon,
-    getSalons,
+    getAllSalons,
     updateSalon
 };

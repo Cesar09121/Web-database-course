@@ -41,10 +41,6 @@ async function deleteBooking(booking_id) {
     let sql = `DELETE FROM booking WHERE booking_id = ${booking_id}`;
     await con.query(sql);
 }
-async function userExists(username) {
-    let sql = `SELECT * FROM booking WHERE username = "${username}"`;
-    return await con.query(sql);
-}
 
 
 module.exports = {
@@ -54,6 +50,5 @@ module.exports = {
     getBookingById,
     bookingTimes,
     updateBooking,
-    deleteBooking,
-    userExists,
+    deleteBooking
 };

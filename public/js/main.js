@@ -1,59 +1,90 @@
-function login(e){
-    e.preventDefault();
+import { getCurrentUser, removeCurrentUser } from "./user.js";
 
-    let user = {
-        username: document.getElementById("username").value,
-        password: document.getElementById("password").value
-    }
+document.addEventListener('DOMContentLoaded', function() {
+  const navbar = document.querySelector('.nav-bar');
 
-    fetchData('/users/login', 'POST', user) 
-    .then(data=>{
-        if(!data.message){
-            setCurrentUser(data);
-            window.location.href = "index.html";
-        }
-    })
-    .catch(err=>{
-        let errorMessage = document.getElementById("error-message");
-        errorMessage.innerHTML = "Invalid username or password";
+  if(getCurrentUser()) {
+    navbar.innerHTML = `
+      <ul>
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./profile.html">Profile</a></li>
+        <li><a href="./services.html">Our Services</a></li>
+        <li><a href="./booking.html">Booking Now</a></li>
+        <li><a href="#" id="logout">Logout</a></li>
+      </ul>
+    `;
+  } else {
+    navbar.innerHTML = `
+      <ul>
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./contact.html">Contact Us</a></li>
+        <li><a href="./services.html">Our Services</a></li>
+        <li><a href="./booking.html">Booking Now</a></li>
+      </ul>
+    `;
+  }
+
+  const logoutLink = document.getElementById("logout");
+  if(logoutLink) {
+    logoutLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      removeCurrentUser();
     });
-}
-let loginForm = document.getElementById("login-form");
-if(loginForm){
-    loginForm.addEventListener("submit", login);
-}
+  }
 
-function validString(word){
-    return word && word.trim() !== '';
-}
+  setupNavigationButtons();
+});
 
-let registerForm = document.getElementById("register-form");
-if(registerForm){
-    registerForm.addEventListener("submit", register);
-}
+function setupNavigationButtons() {
 
-async function fetchData(route = ' ',data = {}, methodType){
-    const response = await fetch(route, {
-        method: methodType,
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+  const signupButton = document.querySelector('#register-button');
+  if(signupButton) {
+    signupButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      fadeOutAndNavigate('register.html');
     });
-    if(!response.ok){
-        return await response.json();
-    }else{
-        throw await response.json();
+  }
+
+  const guestButton = document.querySelector('#services-button');
+  if(guestButton) {
+    guestButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      fadeOutAndNavigate('services.html');
+    });
+  }
+}
+document.addEventListener('DOMContentLoaded', setupNavigationButtons);
+export async function fetchData(route = '', data = {}, methodType) {
+  try {
+    const response = await fetch(`http://localhost:3000${route}`, {
+      method: methodType,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+    
+    if (response.ok) {
+      return await response.json();
+    } else {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'An error occurred');
     }
-}
-function register(e){
-    e.preventDefault();
+  } catch (error) {
+    console.error('API call error:', error);
+    throw error;
+  }
 }
 
+export function fadeOutAndNavigate(url) {
+  console.log('Navigating to:', url);
+  
+  document.body.style.transition = 'opacity 0.5s ease';
+  document.body.style.opacity = '0';
+  
+  setTimeout(() => {
+    window.location.href = url;
+  }, 500);
+}
 
-function getCurrentUser(){
-    return JSON.parse(localStorage.getItem("currentUser"));
-}
-function setCurrentUser(user){
-    localStorage.setItem("currentUser", JSON.stringify(user));
-}
+window.fadeOutAndNavigate = fadeOutAndNavigate;
