@@ -4,7 +4,7 @@ async function createRoleTable() {
     let sql = `CREATE TABLE IF NOT EXISTS role (
         id INT AUTO_INCREMENT PRIMARY KEY,
         role_name ENUM('customer','owner','technician','admin') NOT NULL UNIQUE
-    );`
+    )`;
     await con.query(sql);
   
     const roles = ['customer', 'owner', 'technician', 'admin'];
@@ -23,7 +23,7 @@ async function createTable() {
         created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         role_id INT NOT NULL,
         FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE RESTRICT
-    );`
+    )`;
     await con.query(sql);
 }
 
@@ -32,22 +32,25 @@ async function createUserTable() {
     await createTable();
 }
 
-
 async function getAllUsers() {
     let sql = `SELECT * FROM User`
     return await con.query(sql)
-  }
+}
+async function userExists(user) {
+    let sql = `SELECT * FROM user WHERE username = ? OR email_address = ?`;
+    const [result] = await con.query(sql, [user.Username, user.Email]);
+    return result;
+}
 
 async function register(user) {
+    console.log('Created user:', user);
  
     const cUser = await userExists(user);
-    if (cUser.length > 0) throw Error("Username or email already exists");
-
+    if (cUser) throw Error("Username or email already exists");
 
     const sql1 = `SELECT id FROM role WHERE role_name = ?`;
-    const [role] = await con.query(sql1, [user.Role]);
-    if (!role) throw Error("Invalid role");
-
+    const [roleResult] = await con.query(sql1, [user.Role]);
+    if (!roleResult) throw Error("Invalid role");
 
     const sql2 = `INSERT INTO user (username, password, fullname, email_address, role_id) 
                 VALUES (?, ?, ?, ?, ?)`;
@@ -57,9 +60,8 @@ async function register(user) {
         user.Password, 
         user.Fullname,
         user.Email,
-        role.id
+        roleResult.id
     ]);
-
 
     return await login({username: user.Username, password: user.Password});
 }
@@ -127,7 +129,6 @@ async function updateUser(userId, updates, currentUserId) {
         params.push(roleId);
     }
 
-
     params.push(userId);
 
     if (fields.length === 0) {
@@ -137,26 +138,33 @@ async function updateUser(userId, updates, currentUserId) {
     const sql = `UPDATE user SET ${fields.join(', ')} WHERE user_id = ?`;
     await con.query(sql, params);
     
-
     return await getUserById(userId);
 }
 
 async function deleteUser(user) {
-    let sql = `
-      DELETE FROM user
-      WHERE userId = ${user.userId}
-    `
+    let sql = 
+      `DELETE FROM user
+      WHERE userId = ${user.userId}`
+    
     await con.query(sql)
-  }
+}
+
+async function getUserById(userId) {
+    let sql = `SELECT * FROM user WHERE user_id = ?`;
+    const [result] = await con.query(sql, [userId]);
+    return result;
+}
 
 module.exports = {
     createRoleTable,
     createTable,
     createUserTable,
     getAllUsers,
+    userExists,
     register,
     login,
     validateUserRole,
     updateUser,
-    deleteUser
+    deleteUser,
+    getUserById
 };

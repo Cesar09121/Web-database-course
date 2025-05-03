@@ -1,7 +1,7 @@
 [
     {
       "user_id": 1,
-      "username": "cesar_le",
+      "username": "cesarle",
       "password": "cesar09",
       "fullname": "Cesar Le",
       "email_address": "le@gmail.com",
@@ -10,7 +10,7 @@
     },
     {
       "user_id": 2,
-      "username": "tomoe_vu",
+      "username": "tomoevu",
       "password": "stock",
       "fullname": "Tomoe Chan",
       "email_address": "linh@gmail.com",
@@ -19,7 +19,7 @@
     },
     {
       "user_id": 3,
-      "username": "tuong_le",
+      "username": "tuongle",
       "password": "leit",
       "fullname": "Tuong Le",
       "email_address": "tuong@gmail.com",
@@ -28,7 +28,7 @@
     },
     {
       "user_id": 4,
-      "username": "jolie_nguyen",
+      "username": "jolienguyen",
       "password": "capuchino",
       "fullname": "Thu Nguyen",
       "email_address": "thu@gmail.com",
