@@ -66,86 +66,32 @@ async function register(user) {
     return await login({username: user.Username, password: user.Password});
 }
 
-async function login(user) {
-    const sql = `SELECT u.*, r.role_name as role 
-                FROM user u 
-                JOIN role r ON u.role_id = r.id 
-                WHERE u.username = ?`;
-    const [result] = await con.query(sql, [user.username]);
-    
-    if (!result) throw Error("User not found");
-    if (result.password !== user.password) throw Error("Wrong password");
- 
-    delete result.password;
-    return result;
+async function login(user) {    
+    console.log(user)
+    let sql = `SELECT * FROM user WHERE username="${user.username}" `;
+    const cUser = await con.query(sql)
+    console.log(cUser[0])
+    if(!cUser[0]) throw Error("User not found"); 
+    if(cUser[0].password!= user.password) throw Error("Invalid password");
+    return cUser[0]
+
 }
 
-async function validateUserRole(userId, expectedRole) {
-    const sql = `SELECT r.role_name as role 
-                FROM user u 
-                JOIN role r ON u.role_id = r.id 
-                WHERE u.user_id = ?`;
-    const [user] = await con.query(sql, [userId]);
+async function updateUser(user) {
+    let sql = `UPDATE user SET 
+    username = "${user.username}",
+    password = "${user.password}",
+    WHERE user_id = ${user.userId}`
 
-    if (!user) throw Error("User not found");
-    if (user.role !== expectedRole) {
-        throw Error(`Unauthorized: User must be a ${expectedRole}`);
-    }
-    return true;
-}
-
-async function updateUser(userId, updates, currentUserId) {
-    if (userId !== currentUserId) {
-        throw Error('Unauthorized: Users can only update their own information');
-    }
-
-    let roleId = updates.role_id;
-    if (updates.role && !updates.role_id) {
-        const [role] = await con.query('SELECT id FROM role WHERE role_name = ?', [updates.role]);
-        if (role) roleId = role.id;
-    }
-
-    const fields = [];
-    const params = [];
-
-    if (updates.username) {
-        fields.push('username = ?');
-        params.push(updates.username);
-    }
-    if (updates.password) {
-        fields.push('password = ?');
-        params.push(updates.password);
-    }
-    if (updates.fullname) {
-        fields.push('fullname = ?');
-        params.push(updates.fullname);
-    }
-    if (updates.email) {
-        fields.push('email_address = ?');
-        params.push(updates.email);
-    }
-    if (roleId) {
-        fields.push('role_id = ?');
-        params.push(roleId);
-    }
-
-    params.push(userId);
-
-    if (fields.length === 0) {
-        throw Error('No fields to update');
-    }
-
-    const sql = `UPDATE user SET ${fields.join(', ')} WHERE user_id = ?`;
-    await con.query(sql, params);
-    
-    return await getUserById(userId);
+    await con.query(sql)
+    const currentUser = await userExists(user)
+    return currentUser[0]
 }
 
 async function deleteUser(user) {
     let sql = 
       `DELETE FROM user
       WHERE userId = ${user.userId}`
-    
     await con.query(sql)
 }
 
@@ -163,8 +109,6 @@ module.exports = {
     userExists,
     register,
     login,
-    validateUserRole,
-    updateUser,
     deleteUser,
     getUserById
 };

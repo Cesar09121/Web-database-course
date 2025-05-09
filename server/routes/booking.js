@@ -5,10 +5,12 @@ const Booking = require('../models/booking');
 router
     .post('/createBooking', async (req, res) => {
         try {
-            await Booking.createBooking(req.body);
-            res.send("Booking Created")
-        } catch (err) {
-            res.status(401).send({ message: err.message });
+            const booking = req.body;
+            const result = await Booking.createBooking(booking);
+            res.json({ booking_id: result.booking_id, message: "Booking created successfully" });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: error.message });
         }
     })
     .get('/getBookings', async (req, res) => {

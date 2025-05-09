@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     navbar.innerHTML = `
       <ul>
         <li><a href="./index.html">Home</a></li>
-        <li><a href="./profile.html">Profile</a></li>
+        <li><a href="./contact.html">About Us</a></li>
         <li><a href="./services.html">Our Services</a></li>
         <li><a href="./booking.html">Booking Now</a></li>
         <li><a href="#" id="logout">Logout</a></li>
@@ -25,18 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   const logoutLink = document.getElementById("logout");
-  if(logoutLink) {
-    logoutLink.addEventListener('click', function(e) {
-      e.preventDefault();
-      removeCurrentUser();
-    });
-  }
-
-  setupNavigationButtons();
+  if(logout) logout.addEventListener('click', removeCurrentUser)
 });
 
 function setupNavigationButtons() {
-
   const signupButton = document.querySelector('#register-button');
   if(signupButton) {
     signupButton.addEventListener('click', function(e) {
@@ -44,7 +36,6 @@ function setupNavigationButtons() {
       fadeOutAndNavigate('register.html');
     });
   }
-
   const guestButton = document.querySelector('#services-button');
   if(guestButton) {
     guestButton.addEventListener('click', function(e) {

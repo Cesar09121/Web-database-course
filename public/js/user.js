@@ -23,25 +23,19 @@ function login(e) {
     errorSection.innerText = ""  
 
     const user = {
-      Username: username,
-      Password: password
+      username: username,
+      password: password
     }
-
+    console.log("hi!")
     fetchData('/user/login', user, "POST")
     .then(data => {
       console.log('Login response:', data);
       if(!data.message && data.username) {
         setCurrentUser(data)
-        
-        errorSection.style.color = 'green';
-        errorSection.innerHTML = `Login successful! Welcome ${data.fullname || username}!<br>Redirecting to services...`
-        
-        const inputs = loginForm.querySelectorAll('input, button');
-        inputs.forEach(input => input.disabled = true);
-        
+        window.location.href = "services.html"
         setTimeout(() => {
           window.location.href = "services.html"
-        }, 2000)
+        }, 20)
       } else {
         throw new Error(data.message || 'Login failed')
       }
@@ -117,12 +111,11 @@ function register(e) {
     }
   })
   .catch(err => {
-    console.error('Registration error:', err);
+    console.log('Registration error:', err);
     errorSection.style.color = 'red';
     errorSection.innerText = `${err.message}`
   })
 }  
-
 window.toggleKeyField = function() {
   const userRole = document.getElementById("userRole").value;
   const keyField = document.getElementById("keyField");

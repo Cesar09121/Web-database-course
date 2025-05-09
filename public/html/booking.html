@@ -5,17 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <title>Booking</title>
+    <title>Booking - QuickNails</title>
 
-    
 </head>
 <body>
     <header>
-        
-        <div class = "navbar" style ="height: 10rem;" >
-            <i class="fa-solid fa-spa" style ="font-size: 20px;"></i>
+        <div class="navbar" style="height: 10rem;">
+            <i class="fa-solid fa-spa" style="font-size: 20px;"></i>
             <h1>QuickNails</h1>
-            <nav class = "nav-bar">
+            <nav class="nav-bar">
                 <ul>
                     <li><a href="./index.html">Home</a></li>
                     <li><a href="./contact.html">Contact Us</a></li>
@@ -24,57 +22,39 @@
                 </ul>
             </nav>
         </div>
-        
     </header> 
+    
     <div class="container">
-        <h1>Let's Book an Appointment</h1>
-
-        <div id = "salon-selection">
-            <h2>Selection a salon</h2>
-            <select id = "salon-menu">
-                <option value = "">Select a salon</option>
-            </select>
-        </div>
+        <h1>Book Your Appointment</h1>
 
         <div id="selected-services-summary">
             <h2>Your Selected Services</h2>
-            <ul id="services-list"></ul>
+            <ul id="services-list">
+                <li>Loading your services...</li>
+            </ul>
             <p>Total Price: $<span id="booking-total-price">0.00</span></p>
             <p>Estimated Duration: <span id="booking-total-duration">0</span> minutes</p>
         </div>
 
         <form id="booking-form">
+
             <h2>Choose Date and Time</h2>
             <label for="date">Select a Date:</label>
-            <input type="date" id="date" name="date" required onchange="loadAvailableTechnicians()">
+            <input type="date" id="date" name="date" required>
 
             <label for="time">Select a Time:</label>
-            <input type="time" id="time" name="time" required onchange="loadAvailableTechnicians()">
-            
-            <div id="technician-selection">
-                <h2>Select a Technician</h2>
-                <div class="technician-availability-info">
-                    <p>Please select a salon, date, and time first to see available technicians</p>
-                </div>
-                <div class="technician-options" style="display: none;">
-                    <label>
-                        <input type="radio" name="technician-preference" value="any" checked>
-                        Any available technician
-                    </label>
-                    <div id="available-technicians">
-                    </div>
-                </div>
-            </div>
+            <input type="time" id="time" name="time" min="09:00" max="18:00" required>
             
             <div id="booking-status">
                 <h3>Your booking status will be: <span id="status">pending</span></h3>
+                <p>Once your booking is confirmed, you'll receive a notification.</p>
             </div>
+            
+            <button type="submit">Confirm Booking</button>
         </form>
-     
-        <button type="submit" onclick="fadeOutAndNavigate('payment.html')">Confirm Booking</button>
-
+    </div>
    
-    <script type ="module"src="../js/booking.js"></script>
-    <script type ="module" src="../js/main.js"></script>
+    <script src="../js/booking.js"></script>
+    <script src="../js/main.js" type="module"></script>
 </body>
 </html>

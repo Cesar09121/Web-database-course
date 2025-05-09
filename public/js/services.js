@@ -1,7 +1,6 @@
 const API_URL = 'http://localhost:3000';
 
 document.addEventListener('DOMContentLoaded', function() {
-
   fetch(`${API_URL}/services/getAllServices`)
     .then(response => {
       if (!response.ok) {
@@ -70,6 +69,8 @@ function displayServices(services) {
   categoriesContainer.appendChild(selectedServicesList);
   categoriesContainer.appendChild(serviceSummary);
 }
+const bookingButton = document.getElementById('booking-button');
+
 
 function selectServiceList() {
   const selectedCheckboxes = document.querySelectorAll('input[name="service"]:checked');
@@ -78,10 +79,8 @@ function selectServiceList() {
   const totalDurationElement = document.getElementById('total-duration');
   
   selectedServicesList.innerHTML = '';
-  
   let totalPrice = 0;
   let totalDuration = 0;
-  
   selectedCheckboxes.forEach(checkbox => {
     const serviceName = checkbox.dataset.name;
     const servicePrice = parseFloat(checkbox.dataset.price);
@@ -116,6 +115,27 @@ function fadeOutAndNavigate(url) {
   if (selectedServices.length === 0) {
     alert('Please select at least one service before proceeding.');
     return;
+  }
+  const currentUser = JSON.parse(localStorage.getItem('user'));
+  
+  if (currentUser && currentUser.user_id) {
+    fetch(`${API_URL}/services/saveSelectedServices`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userId: currentUser.user_id,
+        services: selectedServices
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Services saved successfully:', data);
+    })
+    .catch(error => {
+      console.error('Error saving services:', error);
+    });
   }
   
   document.body.style.opacity = 0;

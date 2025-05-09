@@ -4,7 +4,6 @@ async function createTable() {
     let sql = `CREATE TABLE IF NOT EXISTS booking (
         booking_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    salon_id INT,
     service_id INT,
     date_and_time DATETIME NOT NULL,
 	status ENUM('pending', 'confirmed', 'rolesidrole_namecompleted', 'cancelled') NOT NULL DEFAULT 'pending',
@@ -17,8 +16,9 @@ async function createTable() {
 
 async function createBooking(booking) {
     let sql = `INSERT INTO booking (user_id, salon_id, service_id, date_and_time, status) 
-    VALUES (${booking.user_id}, ${booking.salon_id}, ${booking.service_id}, "${booking.date_and_time}", "${booking.status}")`;
-    await con.query(sql);
+    VALUES (${booking.user_id}, ${booking.salon_id}, ${booking.service_id || null}, "${booking.date_and_time}", "${booking.status}")`;
+    const result = await con.query(sql);
+    return { booking_id: result.insertId };
 }
 
 async function getBookings() {

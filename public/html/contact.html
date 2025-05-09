@@ -26,7 +26,6 @@
     </header> 
     
     <div class="container">
-        <h1>Contact Information</h1>
         
         <div class="help-desk-info">
             <h2>Need Help?</h2>
@@ -35,128 +34,26 @@
                     <p><i class="fas fa-headset"></i> <strong>Help Desk:</strong> (845) 123-4567</p>
                     <p><i class="fas fa-envelope"></i> <strong>Support Email:</strong> help@quicknails.com</p>
                     <p><i class="fas fa-clock"></i> <strong>Support Hours:</strong> 24/7 Support Available</p>
-                    <p><i class="fas fa-comment-dots"></i> <strong>Live Chat:</strong> Click the chat icon in the bottom right corner</p>
                 </div>
             </div>
         </div>
         
         <div class="salon-locations">
-            <h2>Find a Salon</h2>
-            
-            <div class="salon-search">
-                <div class="search-filters">
-                    <input type="text" id="salon-search" placeholder="Search by salon name or location">
-                    <select id="salon-filter">
-                        <option value="">All Salons</option>
-                        <option value="cityville">Cityville</option>
-                        <option value="townsburg">Townsburg</option>
-                    </select>
-                    <button id="search-button"><i class="fas fa-search"></i> Find</button>
-                </div>
-            </div>
-            
-            
+            <div class="location-card">
+                <div class="location-info">
+                    <h2>QuickNails</h2>
+                    <p><i class="fas fa-map-marker-alt"></i> <strong>Address:</strong> 123 Nail St, Nail City, NY 12345</p>
+                    <p><i class="fas fa-phone"></i> <strong>Phone:</strong> (845) 987-6543</p>      
             <div class="owner-controls owner-only" style="display: none;">
                 <h3>Salon Owner Controls</h3>
                 <div class="owner-actions">
                     <button id="edit-salon-info" class="primary-button"><i class="fas fa-edit"></i> Edit My Salon Information</button>
                     <button id="update-hours" class="secondary-button"><i class="fas fa-clock"></i> Update Hours</button>
-                </div>
-                
-                
-                <div id="salon-edit-form" style="display: none;">
-                    <h3>Edit Salon Information</h3>
-                    <form id="update-salon-form">
-                        <input type="text" id="salon-name-edit" placeholder="Salon Name">
-                        <input type="text" id="salon-address-edit" placeholder="Address">
-                        <input type="text" id="salon-city-edit" placeholder="City">
-                        <input type="text" id="salon-state-edit" placeholder="State">
-                        <input type="text" id="salon-zip-edit" placeholder="ZIP Code">
-                        <input type="tel" id="salon-phone-edit" placeholder="Phone Number">
-                        <input type="email" id="salon-email-edit" placeholder="Email Address">
-                        <textarea id="salon-description-edit" placeholder="Salon Description"></textarea>
-                        
-                        <div class="form-row">
-                            <label for="salon-hours-edit">Operating Hours:</label>
-                            <div class="hours-inputs">
-                                <div class="day-hours">
-                                    <span>Monday:</span>
-                                    <input type="time" id="mon-open"> to <input type="time" id="mon-close">
-                                </div>
-                                <div class="day-hours">
-                                    <span>Tuesday:</span>
-                                    <input type="time" id="tue-open"> to <input type="time" id="tue-close">
-                                </div>
-                                <div class="day-hours">
-                                    <span>Wednesday:</span>
-                                    <input type="time" id="wed-open"> to <input type="time" id="wed-close">
-                                </div>
-                                <div class="day-hours">
-                                    <span>Thursday:</span>
-                                    <input type="time" id="thu-open"> to <input type="time" id="thu-close">
-                                </div>
-                                <div class="day-hours">
-                                    <span>Friday:</span>
-                                    <input type="time" id="fri-open"> to <input type="time" id="fri-close">
-                                </div>
-                                <div class="day-hours">
-                                    <span>Saturday:</span>
-                                    <input type="time" id="sat-open"> to <input type="time" id="sat-close">
-                                </div>
-                                <div class="day-hours">
-                                    <span>Sunday:</span>
-                                    <input type="time" id="sun-open"> to <input type="time" id="sun-close">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-actions">
-                            <button type="submit" class="primary-button">Save Changes</button>
-                            <button type="button" id="cancel-edit" class="secondary-button">Cancel</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            
-            
-            <div id="salons-list" class="location-cards">
-                
+                </div>                
+            </div>         
             </div>
         </div>
         
-        <div class="contact-form">
-            <h2>Send us a message</h2>
-            <form id="contact-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="contact-name">Your Name</label>
-                        <input type="text" id="contact-name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="contact-email">Your Email</label>
-                        <input type="email" id="contact-email" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="contact-subject">Subject</label>
-                        <input type="text" id="contact-subject" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="contact-salon">Related to Salon (Optional)</label>
-                        <select id="contact-salon">
-                            <option value="">Select a salon</option>
-                           
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="contact-message">Your Message</label>
-                    <textarea id="contact-message" rows="5" required></textarea>
-                </div>
-                <button type="submit" class="primary-button">Send Message</button>
-            </form>
-        </div>
     </div>
     <script type ="module" src="../js/user.js"></script>
     <script type ="module" src="../js/main.js"></script>

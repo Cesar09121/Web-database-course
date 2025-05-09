@@ -5,17 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <title>Let's Booking an Appointment</title>
-
-
+    <title>Let's Book an Appointment</title>
+    
 </head>
 <body>
     <header>
-        
-        <div class = "navbar" style ="height: 10rem;" >
-            <i class="fa-solid fa-spa" style ="font-size: 20px;"></i>
+        <div class="navbar" style="height: 10rem;">
+            <i class="fa-solid fa-spa" style="font-size: 20px;"></i>
             <h1>QuickNails</h1>
-            <nav class = "nav-bar">
+            <nav class="nav-bar">
                 <ul>
                     <li><a href="./index.html">Home</a></li>
                     <li><a href="./contact.html">Contact Us</a></li>
@@ -24,62 +22,23 @@
                 </ul>
             </nav>
         </div>
-        
-    </header> 
-    <h1>Let's Booking an Appointment</h1>
-    <h1>What Services Would You Like to Get?</h1>
+    </header>
     
     <main class="services-container">
+        <h1>Book an Appointment</h1>
+        <h2>What Services Would You Like?</h2>
+        
         <section class="services-selection">
-            <h1>Select Your Services</h1>
-            
             <div class="service-categories">
-                <h2>Manicure</h2>
-                    <label><input type="checkbox" name="service" value="basic-manicure" onchange="selectServiceList()"> Basic Manicure</label>
-                    <label><input type="checkbox" name="service" value="gel-manicure" onchange="selectServiceList()"> Gel Manicure</label>
-                    <label><input type="checkbox" name="service" value="plain-manicure" onchange="selectServiceList()"> Plain Manicure</label>
-        
-                <h2>Pedicure</h2>
-                    <label><input type="checkbox" name="service" value="basic-pedicure" onchange="selectServiceList()"> Basic Pedicure</label>
-                    <label><input type="checkbox" name="service" value="gel-pedicure" onchange="selectServiceList()"> Gel Pedicure</label>
-                    <label><input type="checkbox" name="service" value="special-pedicure" onchange="selectServiceList()"> Special Pedicure</label>
-                
-        
-                <h2>Waxing</h2>
-                    <label><input type="checkbox" name="service" value="full-body-waxing" onchange="selectServiceList()"> Full Body</label>
-                    <label><input type="checkbox" name="service" value="half-body-waxing" onchange="selectServiceList()"> Half Body</label>
-                    <label><input type="checkbox" name="service" value="leg-waxing" onchange="selectServiceList()"> Leg</label>
-                    <label><input type="checkbox" name="service" value="eye-brow-waxing" onchange="selectServiceList()"> Eye-Brow</label>
-                    <label><input type="checkbox" name="service" value="lip-waxing" onchange="selectServiceList()"> Lip</label>
-                    <label><input type="checkbox" name="service" value="chin-waxing" onchange="selectServiceList()"> Chin</label>
-                    <label><input type="checkbox" name="service" value="under-arm-waxing" onchange="selectServiceList()"> Underarm</label>
-                    <label><input type="checkbox" name="service" value="full-face-waxing" onchange="selectServiceList()"> Full Face</label>
-                  
-                <h3>Selected Services:</h3>
-                <ul id="selected-services"></ul>
-                <div id="service-summary">
-                    <p>Total Price: $<span id="total-price">0.00</span></p>
-                    <p>Estimated Duration: <span id="total-duration">0</span> minutes</p>
-                </div>
+                <div class="loading-indicator">Loading services...</div>
             </div>
             
-                 
-            <button type="submit" onclick="fadeOutAndNavigate('booking.html')">Proceed to Booking</button>
+            
+            <button class="booking-button" onclick="fadeOutAndNavigate('booking.html')">Proceed to Booking</button>
         </section>
     </main>
-    <template id="service-template">
-        <div class="service-item">
-            <label>
-                <input type="checkbox" name="service" onchange="updateServiceSelection()">
-                <span class="service-name"></span>
-                <span class="service-price"></span>
-                <span class="service-duration"></span>
-            </label>
-        </div>
-    </template>
     
-    <script type ="module" src="../js/main.js"></script>
-    <script type ="module" src="../js/services.js"></script>
-
+    <script src="../js/main.js" type="module"></script>
+    <script src="../js/services.js"></script>
 </body>
 </html>
